@@ -11,9 +11,15 @@ import {
   AmountWrapper,
 } from "../styles/ComponentStyles";
 
-export default function SpendingList({ spendings, setSpendings }) {
+export default function SpendingList({
+  spendings,
+  setSpendings,
+  filter,
+  ordering,
+}) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [filteredAndOrderedSpendings, setFilteredAndOrderedSpendings] = useState([])
 
   useEffect(() => {
     setLoading(true);
@@ -42,6 +48,41 @@ export default function SpendingList({ spendings, setSpendings }) {
       });
   }, []);
 
+  useEffect(() => {
+    let applyFilterAndOrdering = spendings;
+
+    if (filter === "") {
+      applyFilterAndOrdering = spendings;
+    } else if (filter === "HUF ") {
+      applyFilterAndOrdering = spendings.filter(
+        (s) => s.currency === "HUF"
+      );
+    } else if (filter === "USD") {
+      applyFilterAndOrdering = spendings.filter(
+        (s) => s.currency === "USD"
+      );
+    }
+
+    if (ordering === "-date") {
+      applyFilterAndOrdering = applyFilterAndOrdering.sort(
+        (a, b) => new Date(b.spent_at) - new Date(a.spent_at)
+      );
+    } else if (ordering === "date") {
+      applyFilterAndOrdering = applyFilterAndOrdering.sort(
+        (a, b) => new Date(a.spent_at) - new Date(b.spent_at)
+      );
+    } else if (ordering === "-amount_in_huf") {
+      applyFilterAndOrdering = applyFilterAndOrdering.sort(
+        (a, b) => b.amount - a.amount
+      );
+    } else if (ordering === "amount_in_huf") {
+      applyFilterAndOrdering = applyFilterAndOrdering.sort(
+        (a, b) => a.amount - b.amount
+      );
+    }
+    setFilteredAndOrderedSpendings([...applyFilterAndOrdering])
+  }, [filter, ordering, spendings]);
+
   if (loading) return <Loader />;
 
   return (
@@ -60,8 +101,8 @@ export default function SpendingList({ spendings, setSpendings }) {
           No spendings!
         </h1>
       )}
-      {spendings.length > 0 &&
-        spendings.map((spending) => (
+      {filteredAndOrderedSpendings.length > 0 &&
+        filteredAndOrderedSpendings.map((spending) => (
           <Spending key={spending.id}>
             <IconWrapper>
               <FiDollarSign color="var(--color-blue)" />
