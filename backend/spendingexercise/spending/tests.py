@@ -71,7 +71,7 @@ class TestSpendingList(APITestCase):
 
         self.assertEqual(len(response.data), Spending.objects.count())
 
-    def test_post_spending_successfully(self):
+    def test_post_spending_is_successful(self):
         url = reverse("spending:spendings")
         data = {"description": "knife", "amount": 5, "spent_at": timezone.now(),"currency":"USD"}
 
@@ -80,7 +80,7 @@ class TestSpendingList(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Spending.objects.count(), 3)
 
-    def test_post_spending_successfully(self):
+    def test_post_spending_is_unsuccessful(self):
         url = reverse("spending:spendings")
         data = {"description": "knife", "amount": -5, "spent_at": timezone.now(),"currency":"USD"}
 
