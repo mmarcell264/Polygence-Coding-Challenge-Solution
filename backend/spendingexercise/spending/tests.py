@@ -44,13 +44,13 @@ class TestSpendingSerializer(APITestCase):
 
         self.assertTrue(deserialize_spending.is_valid())
 
-    def test_serialization_is_invalid(self):
+    def test_serialization_is_invalid_cause_negative_amount(self):
         serialize_spending = SpendingSerializer(self.invalid_spending_negative_amount)
         deserialize_spending = SpendingSerializer(data=serialize_spending.data)
 
         self.assertFalse(deserialize_spending.is_valid())
 
-    def test_serialization_is_invalid2(self):
+    def test_serialization_is_invalid_cause_too_long_currency(self):
         serialize_spending = SpendingSerializer(self.invalid_spending_too_long_currency)
         deserialize_spending = SpendingSerializer(data=serialize_spending.data)
 
