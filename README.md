@@ -1,134 +1,60 @@
-# Polygence Coding Challenge
-
-Welcome to the coding challenge portion of the Polygence Engineering interview! Thank you for taking the time to go through this exercise and show us what you can contribute to the team.
-
-## Project overview
-
-![](app.png)
-
-We want you to create a simple application to track spendings.
-
-A spending has the followings properties:
-
-- when it happened
-- how much did we spend
-- in what currency
-- for what/description
-
-This simple web app allows the users to:
-
-- Create a new spending
-- List all the spendings
-- List all the spendings ordered by amount, date
-- List all the spendings filtered by currency
-
-A spending JSON object looks something like this:
-
-```json
-{
-  "description": "Mango",
-  "amount": 1200,
-  "spent_at": "2022-02-23T14:47:20.381Z",
-  "currency": "USD"
-}
-```
-
-### Technical requirements
-
-- Use Git and share the project on GitHub
-- The backend solution must be written in Django
-  - We have written a brief description about how to start a project
-  - But you can start however you like (e.g. using Docker or virtual environments)
-- You can use the included database called SQLite so you don't need to set up a database
-
-### Acceptance criteria
-
-```cucumber
-Given there are no existing spendings
-When I fill the description, currency and amount
-And I click the "Save" button
-Then I see my spending in the list
-And the spending is persisted on the server
-And the form is emptied
-
-Given that I have not filled the description or the amount
-When I click the "Save" button
-Then I see an error indicating the missing field
-
-Given there are existing spendings in the list
-When I change the selected ordering
-Then the list is reorder by the selection
-
-Given there are existing spendings in the list
-When I click on a currency filter button (HUF, USD, All)
-Then the list is filtered by that selection
-And shows only the matching spendings
-```
-
-### What We Look For
-
-This is an opportunity for you to show us what your best code looks like. While we expect the code to work, we are also looking for:
-
-- Clean, modular code
-- Clear naming and conventions
-- Unit tests
-- Error handling
-
-If there are any pre-existing patterns in the code that you don't like, feel free to change them!
-
-### Not required, but nice to have
-
-- Persist data in an SQL based database
-
-## Getting Started
-
-### Initialize the backend project
-
-We have summarized the steps for you but you should follow [the official documentation][django-doc] that well describes
-how to start working with Django.
-
-- [Install the latest Python version][install-python]
-- [Install Django][install-django]
-
-  `$ python -m pip install Django`
-
-- [Create a Django project][create-project]
-
-  `$ django-admin startproject spendingexercise`
-
-- [Start the application](start-application) and verify that it works
-
-  `$ python manage.py runserver`
-
-You should also install and use [the Django REST framework][drf-doc] since you are going to develop a RESTful API.
-
-You should be ready to start working on the challenge now.
-
-### Run the JS/React Web Client
-
-This project is best run using **Node 14.17.x**.
-
-Install client dependencies:
-
+# Polygence Coding Challenge Solution
+## Project setup:
+After you downloaded and extracted or cloned the project go to its folder.
+### Backend setup (on Windows):
 ```shell
-cd web && npm i
+cd backend
 ```
-
-Run the client tests:
-
+#### Create virtual ineviroment:
 ```shell
-cd web && npm test
+python -m -m venv "your_path_to_your_backend_folder\your_preffered_virtual_enviroment_name"
 ```
-
-Run the client (http://localhost:3000):
-
+#### Activate your virtual enviroment:
 ```shell
-cd web && npm start
+"your_path_to_your_virtual_enviroment\Scripts\activate"
+```
+From this segment until Front end setup part you need the virtual enviroment to be activated.
+
+#### Install requiered libraries:
+
+I needed an extra library (django-cors-headers) beside Django and Django Rest Framework, because by default django does not contain Access-Control-Allow-Origin header what fetch API in javascript requeires.
+```shell
+pip install -r requirements.txt
+```
+#### Setup SQLite database:
+```shell
+cd spendingexercise
+```
+```shell
+python manage.py migrate
+```
+#### Run tests:
+```shell
+python manage.py test
+```
+I tested some of the database field constraints with the Serializer because SQLite does not enforce it like it accepts a 15 character long string for a string field with a maximum length of 10.
+#### Start Django developer server:
+```shell
+python manage.py runserver 5000
 ```
 
-[django-doc]: https://docs.djangoproject.com/en/4.0/
-[install-python]: https://docs.djangoproject.com/en/4.0/intro/install/#install-python
-[install-django]: https://docs.djangoproject.com/en/4.0/topics/install/#installing-an-official-release-with-pip
-[create-project]: https://docs.djangoproject.com/en/4.0/intro/tutorial01/#creating-a-project
-[start-application]: https://docs.djangoproject.com/en/4.0/intro/tutorial01/#the-development-server
-[drf-doc]: https://www.django-rest-framework.org/
+### Frontend setup (on Windows):
+#### Install requiered libraries:
+At project root directory
+```shell
+cd web
+```
+```shell
+npm install
+```
+#### Tests:
+I did not write any Unit tests because almost all the important compoenents (FiltersAndOrderings, Form, SpendingList) somewhat dependent from the main App like useState wise. And I think if I write tests for the main App those will be called more likely integrations tests rather Unit tests.
+
+#### Start React frontend:
+```shell
+npm start
+```
+
+
+
+
